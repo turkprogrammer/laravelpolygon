@@ -19,6 +19,7 @@ Route::get('/', function () {
     $authors = \App\Models\Author::all();
     $books = \App\Models\Books::all();
     $cinemas = App\Models\Cinema::all();
+    $users = App\Models\User::has('tasks')->get();
     /**
      * возникает проблема в обратной связи Movies->Cinemas т.к. мы наполняли через фабрику рандомно cinema_movie.cinema_id ., 
      * не у всех фильмов есть кинотеатр,  и выводит фильм без кинотеатра поэтому как сделать проверку чтобы выводить фильм  который
@@ -89,7 +90,7 @@ Route::get('/', function () {
     /*
      * Movies->Cinemas
      */
-    foreach ($movies as $movie) {
+    /*foreach ($movies as $movie) {
         echo "Movie name: " . '<b>' . strtoupper($movie['name']) . '</b>' . '<br/>';
         echo 'Cinemas:' . '<br/>';
         if (is_object($movie)) {
@@ -100,5 +101,17 @@ Route::get('/', function () {
             throw new \Exception('Bad logic');
         }
         echo "<hr/>";
-    }
+    }*/
+      foreach ($users as $user) {
+        echo "User name: " . '<b>' . strtoupper($user['name']) . '</b>' . '<br/>';
+        echo 'Tasks in Process:' . '<br/>';
+        if (is_object($user)) {
+            foreach ($user->tasks as $task) {
+                echo strtoupper($task['name']) .','. '<br/>';
+            }
+        } else {
+            throw new \Exception('Bad logic');
+        }
+        echo "<hr/>";
+      }
 });
